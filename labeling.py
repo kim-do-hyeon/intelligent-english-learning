@@ -60,7 +60,7 @@ for i in range(100) : # Only 100 Group. If you want to more group, then modify t
 createDirectory("labeling")
 labeling_file_name = "labeling/" + str(datetime.now().strftime("%Y%m%d%H%M%S")) + "_labeling.txt"
 f = open(labeling_file_name, 'w')
-
+f.write("File Name : " + file_name + "\n") # Add filename
 print("If you know all words then input 1")
 print("Otherwise, input 0")
 for i in range(len(random_word_list)) :
