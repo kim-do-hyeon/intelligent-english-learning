@@ -7,7 +7,7 @@ import random
 from datetime import datetime
 import pandas as pd
 
-from util import check_file_type
+from util import check_file_type, createDirectory
 
 path = "example_data"
 file_list = os.listdir(path)
@@ -57,7 +57,8 @@ for i in range(100) : # Only 100 Group. If you want to more group, then modify t
 
 ''' Labeling '''
 # Labeling text file name => 20220723235501_labeling.txt
-labeling_file_name = str(datetime.now().strftime("%Y%m%d%H%M%S")) + "_labeling.txt"
+createDirectory("labeling")
+labeling_file_name = "labeling/" + str(datetime.now().strftime("%Y%m%d%H%M%S")) + "_labeling.txt"
 f = open(labeling_file_name, 'w')
 
 print("If you know all words then input 1")
