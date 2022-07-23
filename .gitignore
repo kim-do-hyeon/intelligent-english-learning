@@ -1,0 +1,7 @@
+# Ignore
+__pycache__
+*_labeling.txt
+example_data/*
+
+# Allow
+!example_data/readme.md
