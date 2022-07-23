@@ -5,3 +5,4 @@ example_data/*
 
 # Allow
 !example_data/readme.md
+!example_data/example.csv
