@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<!-- Page content-->
+<div class="container-fluid">
+    <h1 class="mt-4">Exam Words!</h1>
+    <p>This topic creates an intelligent program that allows learners to classify and learn vulnerable word groups by building learning data with data they have learned English words</p>
+    <p>
+        * Create a group of 3 randomly extracted words<br>
+        * After creating a vocabulary book for each group, you learn the vocabulary by memorizing the group yourself<br>
+        * Build learning data by labeling all 3 groups as 0 instead of 1<br>
+        * Create classification models with existing Naive Beige, Random Forest, and Deep Learning models and learn<br>
+        * Classify vulnerable word groups with generated models and create recommended programs<br>
+    </p>
+    <h2 class="mt-4">WordBook List</h2>
+    <select id="word_book" style="width: 70%;">
+        {% for i in word_book_list %}
+        <option value = {{i}}>{{i}}</option>
+        {% endfor %}
+    </select>
+    <button style="width : 10%;" type="button" id="selected_word_book">Start Exam</button>
+    <script>
+        $('#selected_word_book').click(function(){
+            var work_book_title = document.getElementById("word_book").value
+            console.log(work_book_title)
+            var postdata = {'title' : work_book_title}
+            $.ajax({
+                type: 'POST',
+                url: '{{url_for("ajax")}}',
+                data: JSON.stringify(postdata),
+                dataType : 'JSON',
+                contentType: "application/json",
+                success: function(data){
+                    alert("Ajax Succes");
+                    if(data.result['start'] == 1){
+                        alert("Start Exam");
+                        console.log(data.result['word_data'])
+                        document.getElementById("exam_div").style.visibility = "visible";
+                        document.getElementById("index").innerText = data.result['word_index'];
+                        document.getElementById("word_1").innerText = data.result['word_data'][0];
+                        document.getElementById("word_2").innerText = data.result['word_data'][1];
+                        document.getElementById("word_3").innerText = data.result['word_data'][2];
+                        document.getElementById("word_book").disabled = true;
+                        document.getElementById("selected_word_book").disabled = true;
+                    }
+                }
+            })
+        })
+    </script>
+    <div id="exam_div" style="visibility:hidden;">
+        <h2 class="mt-4">Exam</h2>
+            <table class="table-bordered" style="text-Align:center; width:100%;">
+                <th style="width : 10%;">Index</th>
+                <th style="width : 25%">Word 1</th>
+                <th style="width : 25%">Word 2</th>
+                <th style="width : 25%">Word 2</th>
+                <td style="width : 7%;">O</td>
+                <td style="width : 7%;">X</td>
+                <tr>
+                    <td id="index"></td>
+                    <td id="word_1"></td>
+                    <td id="word_2"></td>
+                    <td id="word_3"></td>
+                    <td><button type="button" id="O_btn" style="width: 100%; zoom: 1.5; border: black;">O</button></td>
+                    <td><button type="button" id="X_btn" style="width: 100%; zoom: 1.5; border: black;">X</button></td>
+                </tr>
+            </table>
+            <div style="float: left;">Process : [&nbsp;</div>
+            <div style="float: left;" id = "current_index">1</div>
+            <div style="float: left;">&nbsp;/ 50 ]</div>
+            <script>
+            $('#O_btn').click(function(){
+            var work_book_title = document.getElementById("word_book").value
+            var index = Number(document.getElementById("index").innerText)
+            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1}
+            $.ajax({
+                type: 'POST',
+                url: '{{url_for("ajax")}}',
+                data: JSON.stringify(postdata),
+                dataType : 'JSON',
+                contentType: "application/json",
+                success: function(data){
+                    document.getElementById("index").innerText = data.result['word_index']
+                    document.getElementById("current_index").textContent = data.result['word_index'];
+                    document.getElementById("word_1").innerText = data.result['word_data'][0];
+                    document.getElementById("word_2").innerText = data.result['word_data'][1];
+                    document.getElementById("word_3").innerText = data.result['word_data'][2];
+                }
+            })
+            })
+            $('#X_btn').click(function(){
+            var work_book_title = document.getElementById("word_book").value
+            var index = Number(document.getElementById("index").innerText)
+            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1}
+            $.ajax({
+                type: 'POST',
+                url: '{{url_for("ajax")}}',
+                data: JSON.stringify(postdata),
+                dataType : 'JSON',
+                contentType: "application/json",
+                success: function(data){
+                    document.getElementById("index").innerText = data.result['word_index']
+                    document.getElementById("current_index").textContent = data.result['word_index'];
+                    document.getElementById("word_1").innerText = data.result['word_data'][0];
+                    document.getElementById("word_2").innerText = data.result['word_data'][1];
+                    document.getElementById("word_3").innerText = data.result['word_data'][2];
+                }
+            })
+            })
+            </script>
+    </div>
+</div>
+{% endblock content %}

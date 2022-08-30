@@ -38,3 +38,13 @@ def word_file_check(id) :
 
     file_type = check_file_type(file_name)
     return file_type, word_file_path, file_name
+
+def find_original_file_name(after_file_name) :
+    path = "word_data"
+    file_list = os.listdir(path)
+    original = ""
+    for i in file_list :
+        if i.split(".")[0] == after_file_name :
+            original = i
+            break
+    return original
