@@ -18,3 +18,23 @@ def createDirectory(directory):
             os.makedirs(directory)
     except OSError:
         print("Error: Failed to create the directory.")
+
+def get_word_file_list() :
+    path = "word_data"
+    file_list = os.listdir(path)
+    word_title = []
+    for i in file_list :
+        if i.split('.')[1] == 'csv' or i.split('.')[1] == 'xlsx' :
+            temp = i.split('.')[0]
+            word_title.append(temp)
+    return word_title
+
+def word_file_check(id) :
+    path = "word_data"
+    file_list = os.listdir(path)
+    file_name = file_list[id]
+    word_file_path = path + "/" + file_name
+    print(word_file_path)
+
+    file_type = check_file_type(file_name)
+    return file_type, word_file_path, file_name
