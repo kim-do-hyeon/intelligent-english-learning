@@ -80,11 +80,15 @@
                 dataType : 'JSON',
                 contentType: "application/json",
                 success: function(data){
-                    document.getElementById("index").innerText = data.result['word_index']
-                    document.getElementById("current_index").textContent = data.result['word_index'];
-                    document.getElementById("word_1").innerText = data.result['word_data'][0];
-                    document.getElementById("word_2").innerText = data.result['word_data'][1];
-                    document.getElementById("word_3").innerText = data.result['word_data'][2];
+                    if(data.result['word_index'] >= 50){
+                        alert("Success Word Exam");
+                    }else{
+                        document.getElementById("index").innerText = data.result['word_index']
+                        document.getElementById("current_index").textContent = data.result['word_index'];
+                        document.getElementById("word_1").innerText = data.result['word_data'][0];
+                        document.getElementById("word_2").innerText = data.result['word_data'][1];
+                        document.getElementById("word_3").innerText = data.result['word_data'][2];
+                    }
                 }
             })
             })
@@ -99,11 +103,15 @@
                 dataType : 'JSON',
                 contentType: "application/json",
                 success: function(data){
-                    document.getElementById("index").innerText = data.result['word_index']
-                    document.getElementById("current_index").textContent = data.result['word_index'];
-                    document.getElementById("word_1").innerText = data.result['word_data'][0];
-                    document.getElementById("word_2").innerText = data.result['word_data'][1];
-                    document.getElementById("word_3").innerText = data.result['word_data'][2];
+                    if(data.result['word_index'] > 50){
+                        alert("Success Word Exam");
+                    }else{
+                        document.getElementById("index").innerText = data.result['word_index']
+                        document.getElementById("current_index").textContent = data.result['word_index'];
+                        document.getElementById("word_1").innerText = data.result['word_data'][0];
+                        document.getElementById("word_2").innerText = data.result['word_data'][1];
+                        document.getElementById("word_3").innerText = data.result['word_data'][2];
+                    }
                 }
             })
             })
