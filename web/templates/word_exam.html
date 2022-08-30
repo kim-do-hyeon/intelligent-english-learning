@@ -80,7 +80,7 @@
                 dataType : 'JSON',
                 contentType: "application/json",
                 success: function(data){
-                    if(data.result['word_index'] >= 50){
+                    if(data.result['word_index'] > 50){
                         alert("Success Word Exam");
                     }else{
                         document.getElementById("index").innerText = data.result['word_index']
