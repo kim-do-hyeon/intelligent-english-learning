@@ -19,7 +19,7 @@
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/index">Main Page</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/word_list">English Words</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Learn Words</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/word_learn">Learn Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Test Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Wrong Answer Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
@@ -53,6 +53,7 @@
                 <!-- Page content-->
                 <div class="container-fluid">
                     <h1 class="mt-4">Word View - {{title}}</h1>
+                    <button style="width:100%" class="btn-primary" type="button" onclick="back()">Back</button>
                     <table class="table-bordered" style="text-Align:center; width:100%;">
                         <th style="width : 10%">Index</th>
                         <th style="width : 45%">Word</th>
@@ -66,6 +67,12 @@
                         </tr>
                         {% endfor %}
                     </table>
+                    <button style="width:100%" class="btn-primary" type="button" onclick="back()">Back</button>
+                    <script>
+                    function back() {
+                        history.go(-1);
+                    }
+                    </script>
                 </div>
             </div>
         </div>
