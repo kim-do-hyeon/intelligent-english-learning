@@ -18,7 +18,12 @@ def index():
 def word_list():
     path = "example_data"
     file_list = os.listdir(path)
-    return render_template('word_list.html', word_title = file_list)
+    word_title = []
+    for i in file_list :
+        temp = i.split('.')[0]
+        word_title.append(temp)
+
+    return render_template('word_list.html', word_title = word_title)
 
 @app.route('/word_view/<int:id>')
 def word_view(id) :
