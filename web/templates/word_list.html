@@ -51,19 +51,19 @@
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid">
-                    <h1 class="mt-4">Intelligent English Learning</h1>
-                    <p>This topic creates an intelligent program that allows learners to classify and learn vulnerable word groups by building learning data with data they have learned English words</p>
-                    <p>
-                        * Create a group of 3 randomly extracted words<br>
-                        * After creating a vocabulary book for each group, you learn the vocabulary by memorizing the group yourself<br>
-                        * Build learning data by labeling all 3 groups as 0 instead of 1<br>
-                        * Create classification models with existing Naive Beige, Random Forest, and Deep Learning models and learn<br>
-                        * Classify vulnerable word groups with generated models and create recommended programs<br>
-                    </p>
-                    <h3 class="mt-2">Expectation effectiveness</h3>
-                    <p>
-                        Through this topic, students create their own artificial intelligence learning data construction experience and simple classification models, and additionally seek to improve their English skills by memorizing essential English words
-                    </p>
+                    <h1 class="mt-4">Word List</h1>
+                    <table class="table-bordered" style="text-Align:center; width:100%;">
+                        <th style="width : 10%">Index</th>
+                        <th style="width : 50%">Title of Word List</th>
+                        <th style="width : 40%">View</th>
+                        {% for i in range(word_title | length) %}
+                        <tr>
+                            <td>{{i + 1}}</td>
+                            <td>{{word_title[i]}}</td>
+                            <td><button type="button" onclick="location.href='/word_view/{{i}}';">View</button></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
         </div>
