@@ -22,7 +22,7 @@ def word_list():
 
 @app.route('/word_view/<int:id>')
 def word_view(id) :
-    file_type, word_file_path, file_name = word_file_check(id)
+    file_type, word_file_path, file_name = word_file_check(id + 1)
 
     if file_type != "Unknown" :
         if file_type == "csv" :
@@ -42,7 +42,7 @@ def word_learn():
 
 @app.route('/word_learn_view/<int:id>')
 def word_learn_view(id) :
-    file_type, word_file_path, file_name = word_file_check(id)
+    file_type, word_file_path, file_name = word_file_check(id + 1)
 
     if file_type != "Unknown" :
         if file_type == "csv" :
@@ -82,7 +82,6 @@ def exam_word() :
 def ajax() :
     ''' Get Ajax data'''
     data = request.get_json()
-    print(data)
     if 'start' not in data :
         ''' Start Exam '''
         data['start'] = 1
@@ -90,7 +89,7 @@ def ajax() :
     ''' Find Original File Name '''
     word_book_file_name = find_original_file_name(data['title'])
     file_type = check_file_type(word_book_file_name)
-    
+
     ''' Check File type '''
     if file_type != "Unknown" :
         if file_type == "csv" :
