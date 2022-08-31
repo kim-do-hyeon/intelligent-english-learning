@@ -3,6 +3,10 @@ import os
 import pandas as pd
 import random
 from util import *
+from flask_sqlalchemy import SQLAlchemy
+from model import db
+from model import User
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ABCD"
@@ -117,6 +121,52 @@ def ajax() :
             data['word_index'] = 1
         return jsonify(result = data)
 
+@app.route('/join', methods = ['GET', 'POST'])
+def join() :
+    if request.method == 'GET' :
+        return render_template('join.html')
+    elif request.method == 'POST' :
+        id = request.form['username']
+        password = request.form['password']
+        if not (id and password) :
+            flash("Excpetion Error")
+            return redirect('join')
+        else :
+            user = User(username = id, password = password)
+            db.session.add(user)
+            db.session.commit()
+            flash("Complete Join!")
+            return redirect('index')
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'GET' :
+        return render_template('login.html')
+    elif request.method == 'POST' :
+        login_id = request.form['username']
+        login_password = request.form['password']
+        check_login = User.query.filter_by(username = login_id, password = login_password).first()
+        if check_login != None :
+            session['login'] = 1
+            flash("Hello {}!".format(login_id))
+            return redirect('index')
+        else :
+            flash("Fail to Login.")
+            return redirect('login')
+
+
 
 if __name__ == '__main__' :
+    database_dir = os.path.abspath(os.path.dirname(__file__))
+    db_file = os.path.join(database_dir, 'db.sqlite3')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_file
+    app.config['SQLALCHEMY_COMMIT_ON_TREARDOWN'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # db = SQLAlchemy()
+    db.init_app(app)
+    db.app = app
+    db.create_all()
+
+
     app.run(debug=True)
