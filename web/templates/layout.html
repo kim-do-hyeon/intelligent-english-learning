@@ -21,7 +21,7 @@
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/word_list">English Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/word_learn">Learn Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/word_exam">Exam Words</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Wrong Answer Words</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/wrong_answer_word">Wrong Answer Words</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
                 </div>
@@ -38,9 +38,13 @@
                                 <li class="nav-item active"><a class="nav-link" href="">Home</a></li>
                                 <!-- <li class="nav-item"><a class="nav-link" href="#!">Link</a></li> -->
                                 <li class="nav-item dropdown">
+                                    {% if 'username' not in session %}
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+                                    {% else %}
                                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
+                                    {% endif %}
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        {% if 'login' not in session %}
+                                        {% if 'username' not in session %}
                                         <a class="dropdown-item" href="/login">Login</a>
                                         <a class="dropdown-item" href="/join">Register</a>
                                         {% else %}

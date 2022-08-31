@@ -77,61 +77,93 @@ def word_learn_view(id) :
                                 mean = random_word_meaning_list,
                                 title = file_name.split(".")[0])
 
+@app.route('/wrong_answer_word')
+def wrong_answer_word():
+    if 'username' in session :
+        wrong_word = board.query.filter_by(username = session['username'], labeling = 0).all()
+        value = []
+        for i in wrong_word :
+            filename = i.filename
+            file_type = check_file_type(filename)
+
+            ''' Check File type '''
+            if file_type != "Unknown" :
+                if file_type == "csv" :
+                    df = pd.read_csv("word_data/" + filename, encoding='cp949')
+                elif file_type == "xlsx" :
+                    df = pd.read_excel("word_data/" + filename)
+            mean1 = (df.loc[df['단어'] == i.word1])['뜻'].values[0]
+            mean2 = (df.loc[df['단어'] == i.word2])['뜻'].values[0]
+            mean3 = (df.loc[df['단어'] == i.word3])['뜻'].values[0]
+            value.append([i.word1, mean1, i.word2, mean2, i.word3, mean3])
+        return render_template("wrong_answer_word.html", data = value)
+    else :
+        flash("Please Login")
+        return redirect('login')
+
 @app.route('/word_exam')
 def exam_word() :
-    word_title = get_word_file_list()
-    return render_template('word_exam.html', word_book_list = word_title)
+    if 'username' in session :
+        word_title = get_word_file_list()
+        return render_template('word_exam.html', word_book_list = word_title)
+    else :
+        flash("Please Login")
+        return redirect('index')
 
 @app.route('/ajax', methods=['POST'])
 def ajax() :
-    ''' Get Ajax data'''
-    data = request.get_json()
-    if 'start' not in data :
-        ''' Start Exam '''
-        data['start'] = 1
-    if 'check' in data :
-        check_previous_index = board.query.filter_by(username=session['username']).all()[-1].index
-        board.query.filter_by(index = check_previous_index).update(dict(labeling = data['check']))
-        db.session.commit()
-    
-    ''' Find Original File Name '''
-    word_book_file_name = find_original_file_name(data['title'])
-    file_type = check_file_type(word_book_file_name)
+    if 'username' in session :
+        ''' Get Ajax data'''
+        data = request.get_json()
+        if 'start' not in data :
+            ''' Start Exam '''
+            data['start'] = 1
+        if 'check' in data :
+            check_previous_index = board.query.filter_by(username=session['username']).all()[-1].index
+            board.query.filter_by(index = check_previous_index).update(dict(labeling = data['check']))
+            db.session.commit()
+        
+        ''' Find Original File Name '''
+        word_book_file_name = find_original_file_name(data['title'])
+        file_type = check_file_type(word_book_file_name)
 
-    ''' Check File type '''
-    if file_type != "Unknown" :
-        if file_type == "csv" :
-            df = pd.read_csv("word_data/" + word_book_file_name, encoding='cp949')
-        elif file_type == "xlsx" :
-            df = pd.read_excel("word_data/" + word_book_file_name)
-    
-    ''' Export Random 3 Words'''
-    random_list = []
-    for i in range(3) :
-        random_word_index = random.randint(0, len(df['단어']) - 1)
-        while random_word_index in random_list:
+        ''' Check File type '''
+        if file_type != "Unknown" :
+            if file_type == "csv" :
+                df = pd.read_csv("word_data/" + word_book_file_name, encoding='cp949')
+            elif file_type == "xlsx" :
+                df = pd.read_excel("word_data/" + word_book_file_name)
+        
+        ''' Export Random 3 Words'''
+        random_list = []
+        for i in range(3) :
             random_word_index = random.randint(0, len(df['단어']) - 1)
-        random_list.append(df['단어'][random_word_index])
-    value = board(username = session['username'],
-                            filename = word_book_file_name,
-                            word1 = random_list[0],
-                            word2 = random_list[1],
-                            word3 = random_list[2],
-                            labeling = None)
-    db.session.add(value)
-    db.session.commit()
-    
-    if 'index' in data :
-        data['word_index'] = int(data['index']) + 1
-        data['word_data'] = random_list
-        return jsonify(result = data)
+            while random_word_index in random_list:
+                random_word_index = random.randint(0, len(df['단어']) - 1)
+            random_list.append(df['단어'][random_word_index])
+        value = board(username = session['username'],
+                                filename = word_book_file_name,
+                                word1 = random_list[0],
+                                word2 = random_list[1],
+                                word3 = random_list[2],
+                                labeling = None)
+        db.session.add(value)
+        db.session.commit()
+        
+        if 'index' in data :
+            data['word_index'] = int(data['index']) + 1
+            data['word_data'] = random_list
+            return jsonify(result = data)
+        else :
+            data['word_data'] = random_list
+            try :
+                data['word_index'] = data['word_index'] + 1
+            except :
+                data['word_index'] = 1
+            return jsonify(result = data)
     else :
-        data['word_data'] = random_list
-        try :
-            data['word_index'] = data['word_index'] + 1
-        except :
-            data['word_index'] = 1
-        return jsonify(result = data)
+        flash("Please Login")
+        return redirect('login')
 
 @app.route('/join', methods = ['GET', 'POST'])
 def join() :
@@ -167,6 +199,11 @@ def login():
             flash("Fail to Login.")
             return redirect('login')
 
+@app.route('/logout')
+def logout() :
+    session.pop('username', None)
+    session.pop('login', None)
+    return redirect('login')
 
 
 if __name__ == '__main__' :
