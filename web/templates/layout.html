@@ -38,10 +38,14 @@
                                 <li class="nav-item active"><a class="nav-link" href="">Home</a></li>
                                 <!-- <li class="nav-item"><a class="nav-link" href="#!">Link</a></li> -->
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        {% if 'login' not in session %}
                                         <a class="dropdown-item" href="/login">Login</a>
                                         <a class="dropdown-item" href="/join">Register</a>
+                                        {% else %}
+                                        <a class="dropdown-item" href="/logout">Logout</a>
+                                        {% endif %}
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#!">Contact</a>
                                     </div>

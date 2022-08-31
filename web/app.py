@@ -6,7 +6,7 @@ from util import *
 from flask_sqlalchemy import SQLAlchemy
 from model import db
 from model import User
-
+from model import board
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ABCD"
@@ -89,6 +89,10 @@ def ajax() :
     if 'start' not in data :
         ''' Start Exam '''
         data['start'] = 1
+    if 'check' in data :
+        check_previous_index = board.query.filter_by(username=session['username']).all()[-1].index
+        board.query.filter_by(index = check_previous_index).update(dict(labeling = data['check']))
+        db.session.commit()
     
     ''' Find Original File Name '''
     word_book_file_name = find_original_file_name(data['title'])
@@ -108,7 +112,15 @@ def ajax() :
         while random_word_index in random_list:
             random_word_index = random.randint(0, len(df['단어']) - 1)
         random_list.append(df['단어'][random_word_index])
-
+    value = board(username = session['username'],
+                            filename = word_book_file_name,
+                            word1 = random_list[0],
+                            word2 = random_list[1],
+                            word3 = random_list[2],
+                            labeling = None)
+    db.session.add(value)
+    db.session.commit()
+    
     if 'index' in data :
         data['word_index'] = int(data['index']) + 1
         data['word_data'] = random_list
@@ -148,6 +160,7 @@ def login():
         check_login = User.query.filter_by(username = login_id, password = login_password).first()
         if check_login != None :
             session['login'] = 1
+            session['username'] = login_id
             flash("Hello {}!".format(login_id))
             return redirect('index')
         else :

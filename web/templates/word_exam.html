@@ -72,7 +72,7 @@
             $('#O_btn').click(function(){
             var work_book_title = document.getElementById("word_book").value
             var index = Number(document.getElementById("index").innerText)
-            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1}
+            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1, 'check' : 1}
             $.ajax({
                 type: 'POST',
                 url: '{{url_for("ajax")}}',
@@ -95,7 +95,7 @@
             $('#X_btn').click(function(){
             var work_book_title = document.getElementById("word_book").value
             var index = Number(document.getElementById("index").innerText)
-            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1}
+            var postdata = {'title' : work_book_title, 'index' : index, 'start' : 1, 'check' : 0}
             $.ajax({
                 type: 'POST',
                 url: '{{url_for("ajax")}}',
